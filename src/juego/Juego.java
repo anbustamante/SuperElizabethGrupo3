@@ -1,8 +1,6 @@
 package juego;
 
 
-import java.awt.Color;
-
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
@@ -14,6 +12,7 @@ public class Juego extends InterfaceJuego
 	
 	// Variables y métodos propios de cada grupo
 	private Personaje elizabeth;
+	private piso[] pisos;
 	
 	
 	Juego()
@@ -25,6 +24,14 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		
 		this.elizabeth = new Personaje(50, 400);
+		
+		this.pisos = new piso[5];
+		
+		this.pisos[0] = new piso(500, 550, 1000, 100);
+		this.pisos[1] = new piso(1650, 550, 1000, 100);
+		this.pisos[2] = new piso(2750, 550, 800, 100);
+		this.pisos[3] = new piso(3800, 550, 1000, 100); 
+		this.pisos[4] = new piso(4900, 550, 1000, 100);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -38,24 +45,53 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 	{
-		// Procesamiento de un instante de tiempo
-		this.elizabeth.dibujar(this.entorno);
-		
-		// --- 1. LÓGICA DE MOVIMIENTO ---
-        // Si aprieta la derecha, le decimos al personaje que se mueva a la derecha
-        if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
-            this.elizabeth.moverDerecha();
-        }
-        
-        // Si aprieta la izquierda, le decimos al personaje que se mueva a la izquierda
-        if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
-            this.elizabeth.moverIzquierda();
-        }
+	    // --- 1. MOVERSE LATERALMENTE ---
+	    if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
+	        this.elizabeth.moverDerecha();
+	    }
+	    if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
+	        this.elizabeth.moverIzquierda();
+	    }
 
-        // --- 2. DIBUJAR TODO ---
-        // Al final de todo el procesamiento del tick, dibujamos
-        this.elizabeth.dibujar(this.entorno);
+	    // Movemos los pisos
+	    for (int i = 0; i < this.pisos.length; i++) {
+	        if (this.pisos[i] != null) {
+	            this.pisos[i].mover();
+	        }
+	    }
+
+	    // --- 2. REVISAR SI TOCA EL PISO ---
+	    boolean pisandoSuelo = false;
+	    for (int i = 0; i < this.pisos.length; i++) {
+	        if (this.pisos[i] != null && this.elizabeth.tocaPiso(this.pisos[i])) {
+	            pisandoSuelo = true; 
+	        }
+	    }
+
+	    // --- 3. LÓGICA DE SALTO ---
+	    // Si presiona Arriba y ADEMÁS está pisando el suelo, salta
+	    if (this.entorno.sePresiono(this.entorno.TECLA_ARRIBA) && pisandoSuelo) {
+	        this.elizabeth.saltar();
+	    }
+
+	    // --- 4. APLICAR GRAVEDAD O SUBIDA ---
+	    // Si NO pisa el suelo, la gravedad tira para abajo
+	    if (!pisandoSuelo) {
+	        this.elizabeth.caer(); 
+	    }
+	    
+	    // Siempre procesamos el salto por si está a mitad de vuelo
+	    this.elizabeth.procesarSalto();
+
+	    // --- 5. DIBUJAR TODO ---
+	    for (int i = 0; i < this.pisos.length; i++) {
+	        if (this.pisos[i] != null) {
+	            this.pisos[i].dibujar(this.entorno);
+	        }
+	    }
+	    this.elizabeth.dibujar(this.entorno);
 	}
+	
 	
 	
 

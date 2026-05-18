@@ -34,12 +34,16 @@ public class Personaje {
 	
 	// 3. Método para avanzar (suma a la x)
     public void moverDerecha() {
-        this.x = this.x + this.velocidad;
+    	if (this.x +(this.ancho /2) < 800) {
+    	this.x = this.x + this.velocidad;
+    	}
     }
 
     // 4. Método para retroceder (resta a la x)
     public void moverIzquierda() {
+    	if (this.x - (this.ancho /2) > 0) {
         this.x = this.x - this.velocidad;
+    	}
     }
     
  // Método para que la gravedad haga efecto (suma a la Y para ir hacia abajo)

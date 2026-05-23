@@ -4,33 +4,40 @@ package juego;
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
+
+
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
 	private Entorno entorno;
-	
-	
+
+
+
 	// Variables y métodos propios de cada grupo
 	private Personaje elizabeth;
 	private piso[] pisos;
-	
-	
-	Juego()
+	private BolaDeFuego bolaDeFuego;
+
+	// este es el constructor
+ Juego()
 	{
 		// Inicializa el objeto entorno
-		
+
+		// esto que hace? no está duplicado?
 		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 		this.entorno = new Entorno(this, "Super Elizabet Sis", 800, 600);
 		// Inicializar lo que haga falta para el juego
-		
+
 		this.elizabeth = new Personaje(50, 400);
-		
+		// Acá hago que bolaDeFuego inicialice en null, la idea es que cuando arranca el juego no hay bolas de fuego creadas
+		this.bolaDeFuego = null;
+
 		this.pisos = new piso[5];
-		
+
 		this.pisos[0] = new piso(500, 550, 1000, 100);
 		this.pisos[1] = new piso(1650, 550, 1000, 100);
 		this.pisos[2] = new piso(2750, 550, 800, 100);
-		this.pisos[3] = new piso(3800, 550, 1000, 100); 
+		this.pisos[3] = new piso(3800, 550, 1000, 100);
 		this.pisos[4] = new piso(4900, 550, 1000, 100);
 
 		// Inicia el juego!
@@ -38,9 +45,9 @@ public class Juego extends InterfaceJuego
 	}
 
 	/**
-	 * Durante el juego, el método tick() será ejecutado en cada instante y 
-	 * por lo tanto es el método más importante de esta clase. Aquí se debe 
-	 * actualizar el estado interno del juego para simular el paso del tiempo 
+	 * Durante el juego, el método tick() será ejecutado en cada instante y
+	 * por lo tanto es el método más importante de esta clase. Aquí se debe
+	 * actualizar el estado interno del juego para simular el paso del tiempo
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick()
@@ -53,6 +60,28 @@ public class Juego extends InterfaceJuego
 	        this.elizabeth.moverIzquierda();
 	    }
 
+		// con esto trabajo el disparo de la bola de fuego
+		// Si se presiona el botón izquierdo del mouse y no hay una bola activa,
+		// se crea una nueva bola desde la posición de Elizabeth hacia el mouse.
+		if (this.entorno.sePresionoBoton(this.entorno.BOTON_IZQUIERDO) && this.bolaDeFuego == null) {
+			this.bolaDeFuego = new BolaDeFuego(
+					this.elizabeth.getX(),
+					this.elizabeth.getY(),
+					this.entorno.mouseX(),
+					this.entorno.mouseY()
+			);
+		}
+
+			// Si la bola existe, la muevo con cada tick
+		if (this.bolaDeFuego != null) {
+			this.bolaDeFuego.mover();
+
+			// Si la bola sale de la pantalla, la elimino
+			if (this.bolaDeFuego.salioDePantalla(this.entorno)) {
+				this.bolaDeFuego = null;
+			}
+		}
+
 	    // Movemos los pisos
 	    for (int i = 0; i < this.pisos.length; i++) {
 	        if (this.pisos[i] != null) {
@@ -64,7 +93,7 @@ public class Juego extends InterfaceJuego
 	    boolean pisandoSuelo = false;
 	    for (int i = 0; i < this.pisos.length; i++) {
 	        if (this.pisos[i] != null && this.elizabeth.tocaPiso(this.pisos[i])) {
-	            pisandoSuelo = true; 
+	            pisandoSuelo = true;
 	        }
 	    }
 
@@ -77,9 +106,9 @@ public class Juego extends InterfaceJuego
 	    // --- 4. APLICAR GRAVEDAD O SUBIDA ---
 	    // Si NO pisa el suelo, la gravedad tira para abajo
 	    if (!pisandoSuelo) {
-	        this.elizabeth.caer(); 
+	        this.elizabeth.caer();
 	    }
-	    
+
 	    // Siempre procesamos el salto por si está a mitad de vuelo
 	    this.elizabeth.procesarSalto();
 
@@ -90,8 +119,12 @@ public class Juego extends InterfaceJuego
 	        }
 	    }
 	    this.elizabeth.dibujar(this.entorno);
+
+		if (this.bolaDeFuego != null) {
+			this.bolaDeFuego.dibujar(this.entorno);
+		}
 	}
-	
+
 	
 	
 

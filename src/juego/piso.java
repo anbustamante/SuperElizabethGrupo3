@@ -10,29 +10,29 @@ public class piso {
 	private double ancho;
 	private double alto;
 	private double velocidad;
-	
-	
+
+
 	public piso(double x, double y, double ancho, double alto) {
-	this.x = x;
-	this.y = y;
-	this.ancho = ancho;
-	this.alto = alto;
-	this.velocidad = 2.0;
-}
+		this.x = x;
+		this.y = y;
+		this.ancho = ancho;
+		this.alto = alto;
+		this.velocidad = 2.0;
+	}
 
-public void dibujar(Entorno entorno) {
-	entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.GREEN);
-	
-}
+	public void dibujar(Entorno entorno) {
+		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.GREEN);
 
-public void mover() {
-	this.x = this.x - this.velocidad;
-}
+	}
 
-//Métodos para compartir las medidas (Getters)
-public double getX() { return this.x; }
-public double getY() { return this.y; }
-public double getAncho() { return this.ancho; }
-public double getAlto() { return this.alto; }
-	
+	public void mover() {
+		this.x = this.x - this.velocidad;
+	}
+
+	//Métodos para compartir las medidas (Getters)
+	public double getX() { return this.x; }
+	public double getY() { return this.y; }
+	public double getAncho() { return this.ancho; }
+	public double getAlto() { return this.alto; }
+
 }

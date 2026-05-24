@@ -3,6 +3,7 @@ package juego;
 import java.awt.Color;
 import entorno.Entorno;
 
+
 public class Personaje {
 	
 	
@@ -21,7 +22,7 @@ public class Personaje {
 		this.y = y;
 		this.ancho = 30;
 		this.alto = 50;
-		this.velocidad = 4.5;
+		this.velocidad = 1.5;
 		this.saltando = false;
 		this.impulso = 0;
 	}
@@ -34,14 +35,14 @@ public class Personaje {
 	
 	// 3. Método para avanzar (suma a la x)
     public void moverDerecha() {
-    	if (this.x +(this.ancho /2) < 800) {
+    	if (this.x +(this.ancho /2) < 800) { // limite para parte derecha
     	this.x = this.x + this.velocidad;
     	}
     }
 
     // 4. Método para retroceder (resta a la x)
     public void moverIzquierda() {
-    	if (this.x - (this.ancho /2) > 0) {
+    	if (this.x - (this.ancho /2) > 0) { //limite parte izquierda
         this.x = this.x - this.velocidad;
     	}
     }
@@ -73,7 +74,7 @@ public class Personaje {
         return false; // No, está en el aire
     }
     
- // Activa el salto y le da la "nafta" inicial
+ // Activa el salto
     public void saltar() {
         this.saltando = true;
         this.impulso = 20; // 20 frames subiendo

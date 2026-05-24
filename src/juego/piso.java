@@ -3,6 +3,7 @@ package juego;
 import java.awt.Color;
 import entorno.Entorno;
 
+
 public class piso {
 
 	private double x;
@@ -17,7 +18,7 @@ public class piso {
 	this.y = y;
 	this.ancho = ancho;
 	this.alto = alto;
-	this.velocidad = 2.0;
+	this.velocidad = 7;
 }
 
 public void dibujar(Entorno entorno) {
@@ -34,5 +35,6 @@ public double getX() { return this.x; }
 public double getY() { return this.y; }
 public double getAncho() { return this.ancho; }
 public double getAlto() { return this.alto; }
+public double getVelocidad() { return this.velocidad; }
 	
 }

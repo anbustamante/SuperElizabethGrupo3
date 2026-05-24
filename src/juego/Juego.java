@@ -4,6 +4,7 @@ package juego;
 import entorno.Entorno;
 import entorno.InterfaceJuego;
 
+
 public class Juego extends InterfaceJuego
 {
 	// El objeto Entorno que controla el tiempo y otros
@@ -13,9 +14,10 @@ public class Juego extends InterfaceJuego
 	// Variables y métodos propios de cada grupo
 	private Personaje elizabeth;
 	private piso[] pisos;
+	private Bandera Bandera;
 	
 	
-	Juego()
+	public Juego()
 	{
 		// Inicializa el objeto entorno
 		
@@ -24,6 +26,7 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		
 		this.elizabeth = new Personaje(50, 400);
+		this.Bandera = new Bandera(5390.0, 425.0);
 		
 		this.pisos = new piso[5];
 		
@@ -52,12 +55,22 @@ public class Juego extends InterfaceJuego
 	    if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
 	        this.elizabeth.moverIzquierda();
 	    }
-
+	    
+      
+	    
 	    // Movemos los pisos
-	    for (int i = 0; i < this.pisos.length; i++) {
-	        if (this.pisos[i] != null) {
-	            this.pisos[i].mover();
+	    if (this.entorno.estaPresionada(entorno.TECLA_DERECHA) && this.Bandera.getX() > 700.0) {
+	    	this.elizabeth.moverDerecha();
+	    	
+	    	for (int i = 0; i < this.pisos.length; i++) {
+	    		this.pisos[i].mover(); 
+	    			
+	    		}
+	    		this.Bandera.mover(this.pisos[0].getVelocidad());
+	    		
 	        }
+	    if(this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+	    	this.elizabeth.moverIzquierda();
 	    }
 
 	    // --- 2. REVISAR SI TOCA EL PISO ---
@@ -89,7 +102,9 @@ public class Juego extends InterfaceJuego
 	            this.pisos[i].dibujar(this.entorno);
 	        }
 	    }
+	    
 	    this.elizabeth.dibujar(this.entorno);
+	    this.Bandera.dibujar(this.entorno);
 	}
 	
 	

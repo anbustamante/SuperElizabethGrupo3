@@ -1,8 +1,11 @@
 package juego;
 
 
+import java.awt.Color;
+
 import entorno.Entorno;
 import entorno.InterfaceJuego;
+
 
 public class Juego extends InterfaceJuego
 {
@@ -12,10 +15,11 @@ public class Juego extends InterfaceJuego
 	
 	// Variables y métodos propios de cada grupo
 	private Personaje elizabeth;
-	private piso[] pisos;
+	private Piso[] pisos;
+	private Bandera Bandera;
 	
 	
-	Juego()
+	public Juego()
 	{
 		// Inicializa el objeto entorno
 		
@@ -24,14 +28,15 @@ public class Juego extends InterfaceJuego
 		// Inicializar lo que haga falta para el juego
 		
 		this.elizabeth = new Personaje(50, 400);
+		this.Bandera = new Bandera(5390.0, 425.0);
 		
-		this.pisos = new piso[5];
+		this.pisos = new Piso[5];
 		
-		this.pisos[0] = new piso(500, 550, 1000, 100);
-		this.pisos[1] = new piso(1650, 550, 1000, 100);
-		this.pisos[2] = new piso(2750, 550, 800, 100);
-		this.pisos[3] = new piso(3800, 550, 1000, 100); 
-		this.pisos[4] = new piso(4900, 550, 1000, 100);
+		this.pisos[0] = new Piso(500, 550, 1000, 100);
+		this.pisos[1] = new Piso(1650, 550, 1000, 100);
+		this.pisos[2] = new Piso(2750, 550, 800, 100);
+		this.pisos[3] = new Piso(3800, 550, 1000, 100); 
+		this.pisos[4] = new Piso(4900, 550, 1000, 100);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -45,36 +50,48 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 	{
-	    // --- 1. MOVERSE LATERALMENTE ---
+	    // MOVERSE LATERALMENTE ---
 	    if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
 	        this.elizabeth.moverDerecha();
 	    }
 	    if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
 	        this.elizabeth.moverIzquierda();
 	    }
-
-	    // Movemos los pisos
-	    for (int i = 0; i < this.pisos.length; i++) {
-	        if (this.pisos[i] != null) {
-	            this.pisos[i].mover();
+	    
+      
+	    
+	    // MOVER LOS PISOS ---
+	    if (this.entorno.estaPresionada(entorno.TECLA_DERECHA) && this.Bandera.getX() > 300.0) {
+	    	this.elizabeth.moverDerecha();
+	    	
+	    	for (int i = 0; i < this.pisos.length; i++) {
+	    		this.pisos[i].mover(); 
+	    			
+	    		}
+	    		this.Bandera.mover(this.pisos[0].getVelocidad());
+	    		
 	        }
+	    if(this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+	    	this.elizabeth.moverIzquierda();
 	    }
 
-	    // --- 2. REVISAR SI TOCA EL PISO ---
+	    // REVISAR SI TOCA EL PISO ---
 	    boolean pisandoSuelo = false;
 	    for (int i = 0; i < this.pisos.length; i++) {
 	        if (this.pisos[i] != null && this.elizabeth.tocaPiso(this.pisos[i])) {
 	            pisandoSuelo = true; 
 	        }
 	    }
+	    
+	    
 
-	    // --- 3. LÓGICA DE SALTO ---
+	    // LÓGICA DE SALTO ---
 	    // Si presiona Arriba y ADEMÁS está pisando el suelo, salta
 	    if (this.entorno.sePresiono(this.entorno.TECLA_ARRIBA) && pisandoSuelo) {
 	        this.elizabeth.saltar();
 	    }
 
-	    // --- 4. APLICAR GRAVEDAD O SUBIDA ---
+	    //  APLICAR GRAVEDAD O SUBIDA ---
 	    // Si NO pisa el suelo, la gravedad tira para abajo
 	    if (!pisandoSuelo) {
 	        this.elizabeth.caer(); 
@@ -89,7 +106,18 @@ public class Juego extends InterfaceJuego
 	            this.pisos[i].dibujar(this.entorno);
 	        }
 	    }
+	    
+	    
+	    if (this.elizabeth.tocarBandera(this.Bandera)) {
+	    	
+	    	this.entorno.cambiarFont("Arial", 40, Color.GREEN);
+	    	this.entorno.escribirTexto("¡GANASTE EL JUEGO!", 250, 300);
+	    }
+	    
 	    this.elizabeth.dibujar(this.entorno);
+	    this.Bandera.dibujar(this.entorno);
+	
+	
 	}
 	
 	

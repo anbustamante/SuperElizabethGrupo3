@@ -36,5 +36,5 @@ public double getY() { return this.y; }
 public double getAncho() { return this.ancho; }
 public double getAlto() { return this.alto; }
 public double getVelocidad() { return this.velocidad; }
-	
+
 }

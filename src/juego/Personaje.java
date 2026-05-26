@@ -5,18 +5,17 @@ import entorno.Entorno;
 
 
 public class Personaje {
-	
-	
-	private double x;
-	private double y;
-	private double ancho;
-	private double alto;
-	private double velocidad;
-	private boolean saltando;
-	private int impulso;
 
-	
-	
+    private double x;
+    private double y;
+    private double ancho;
+    private double alto;
+    private double velocidad;
+    private boolean saltando;
+    private int impulso;
+
+
+
 	public Personaje(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -53,17 +52,17 @@ public class Personaje {
     }
     
     
-    
-    
+
+
     // Método para detectar si choca contra un piso
     public boolean tocaPiso(Piso piso) {
         // Calculamos dónde están los pies de Elizabeth y sus costados
         double miAbajo = this.y + (this.alto / 2);
         double miIzquierda = this.x - (this.ancho / 2);
         double miDerecha = this.x + (this.ancho / 2);
-        
-        
-        
+
+
+
 
         // Calculamos dónde está el techo del piso y sus bordes
         double pisoArriba = piso.getY() - (piso.getAlto() / 2);
@@ -79,20 +78,20 @@ public class Personaje {
         return false; // No, está en el aire
     }
     
- 
-    
-    
-    
+
+
+
+
     // Activa el salto
     public void saltar() {
         this.saltando = true;
         this.impulso = 20; // 20 frames subiendo
     }
     
- 
-    
-    
-    
+
+
+
+
     // Procesa la subida ganándole a la gravedad
     public void procesarSalto() {
         if (this.saltando && this.impulso > 0) {
@@ -104,16 +103,24 @@ public class Personaje {
     }
     
     
-    
+
     // Al tocar la bandera se termina el juego
     public boolean tocarBandera(Bandera b) {
     	boolean colisionX = Math.abs(this.x - b.getX()) < (this.ancho / 2 + b.getAncho() /2 );
-    	
+
     	boolean colisionY = Math.abs(this.y - b.getY()) < (this.alto / 2 + b.getAlto() / 2);
-    	
+
     	return colisionX && colisionY;
     }
-    
-    
-    
+
+
+
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
 }

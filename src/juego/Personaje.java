@@ -21,7 +21,7 @@ public class Personaje {
 		this.y = y;
 		this.ancho = 30;
 		this.alto = 50;
-		this.velocidad = 1.5;
+		this.velocidad = 1;
 		this.saltando = false;
 		this.impulso = 0;
 	}
@@ -42,7 +42,7 @@ public class Personaje {
     // 4. Método para retroceder (resta a la x)
     public void moverIzquierda() {
     	if (this.x - (this.ancho /2) > 0) { //limite parte izquierda
-        this.x = this.x - 3.5;
+        this.x = this.x - this.velocidad;
     	}
     }
     
@@ -50,24 +50,18 @@ public class Personaje {
     public void caer() {
         this.y = this.y + 4.5; // Podés ajustar este número para que caiga más rápido o más lento
     }
-    
-    
-
 
     // Método para detectar si choca contra un piso
-    public boolean tocaPiso(Piso piso) {
+    public boolean tocaPiso(Plataforma plataforma) {
         // Calculamos dónde están los pies de Elizabeth y sus costados
         double miAbajo = this.y + (this.alto / 2);
         double miIzquierda = this.x - (this.ancho / 2);
         double miDerecha = this.x + (this.ancho / 2);
 
-
-
-
         // Calculamos dónde está el techo del piso y sus bordes
-        double pisoArriba = piso.getY() - (piso.getAlto() / 2);
-        double pisoIzquierda = piso.getX() - (piso.getAncho() / 2);
-        double pisoDerecha = piso.getX() + (piso.getAncho() / 2);
+        double pisoArriba = plataforma.getY() - (plataforma.getAlto() / 2);
+        double pisoIzquierda = plataforma.getX() - (plataforma.getAncho() / 2);
+        double pisoDerecha = plataforma.getX() + (plataforma.getAncho() / 2);
 
         // Si los pies tocan el techo Y el personaje está dentro del ancho del bloque:
         if (miAbajo >= pisoArriba && miAbajo <= pisoArriba + 10 && miDerecha > pisoIzquierda && miIzquierda < pisoDerecha) {
@@ -77,20 +71,12 @@ public class Personaje {
         }
         return false; // No, está en el aire
     }
-    
-
-
-
 
     // Activa el salto
     public void saltar() {
         this.saltando = true;
-        this.impulso = 20; // 20 frames subiendo
+        this.impulso = 15; // 20 frames subiendo
     }
-    
-
-
-
 
     // Procesa la subida ganándole a la gravedad
     public void procesarSalto() {
@@ -101,25 +87,16 @@ public class Personaje {
             this.saltando = false; // Se quedó sin nafta, empieza a caer
         }
     }
-    
-    
-
     // Al tocar la bandera se termina el juego
     public boolean tocarBandera(Bandera b) {
     	boolean colisionX = Math.abs(this.x - b.getX()) < (this.ancho / 2 + b.getAncho() /2 );
-
     	boolean colisionY = Math.abs(this.y - b.getY()) < (this.alto / 2 + b.getAlto() / 2);
-
     	return colisionX && colisionY;
     }
-
-
-
 
     public double getX() {
         return this.x;
     }
-
     public double getY() {
         return this.y;
     }

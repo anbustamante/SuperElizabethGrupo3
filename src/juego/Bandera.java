@@ -20,8 +20,11 @@ public class Bandera {
 
 	}
 	
-	public void mover(double velocidadDelPiso) {
+	public void moverDerecha(double velocidadDelPiso) {
 		this.x = this.x - velocidadDelPiso; //hacemos que la bandera se mueva a la velocidad del mapa 7 es la velocidad del piso. que aparece en la clase piso
+	}
+	public void moverIzquierda(double velocidadDelPiso) {
+		this.x = this.x + velocidadDelPiso; //hacemos que la bandera se mueva a la velocidad del mapa 7 es la velocidad del piso. que aparece en la clase piso
 	}
 	
 	public void dibujar(Entorno entorno) {

@@ -18,42 +18,23 @@ public class Juego extends InterfaceJuego
 
 	// Variables y métodos propios de cada grupo
 	private Personaje elizabeth;
-	private Piso[] pisos;
-	private Bandera Bandera;
+	private Plataforma[] plataformas;
+	private Bandera bandera;
     private BolaDeFuego bolaDeFuego;
 
     // acá las features de poder pausar y perder el juego si la tipa se cae
     private boolean pausado;
     private boolean perdio;
+	private boolean gano;
 
 
 	public Juego()
 	{
 		// Inicializa el objeto entorno
-
-		// esto que hace? no está duplicado?
-		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
 		this.entorno = new Entorno(this, "Super Elizabet Sis", 800, 600);
 		// Inicializar lo que haga falta para el juego
 		//esto es para reiniciar el juego
 		this.reiniciarJuego();
-
-		this.elizabeth = new Personaje(50, 400);
-        // Acá hago que bolaDeFuego inicialice en null, la idea es que cuando arranca el juego no hay bolas de fuego creadas
-        this.bolaDeFuego = null;
-        // esto es por el pausado y que finalice el juego si me caigo
-        this.pausado = false;
-        this.perdio = false;
-        this.Bandera = new Bandera(5390.0, 425.0);
-
-		this.pisos = new Piso[5];
-
-		this.pisos[0] = new Piso(500, 550, 1000, 100);
-		this.pisos[1] = new Piso(1650, 550, 1000, 100);
-		this.pisos[2] = new Piso(2750, 550, 800, 100);
-		this.pisos[3] = new Piso(3800, 550, 1000, 100);
-		this.pisos[4] = new Piso(4900, 550, 1000, 100);
-
 		// Inicia el juego!
 		this.entorno.iniciar();
 	}
@@ -66,7 +47,6 @@ public class Juego extends InterfaceJuego
 	 */
 	public void tick()
 	{
-	    // MOVERSE LATERALMENTE ---
 		// apretando la P ponemos pausa
 		if (this.entorno.sePresiono('P') || this.entorno.sePresiono('p')) {
 			this.pausado = !this.pausado;
@@ -95,16 +75,23 @@ public class Juego extends InterfaceJuego
 			if (this.entorno.sePresiono('R') || this.entorno.sePresiono('r')) {
 				this.reiniciarJuego();
 			}
-
 			return;
 		}
-	    // --- 1. MOVERSE LATERALMENTE ---
-	    if (this.entorno.estaPresionada(this.entorno.TECLA_DERECHA)) {
-	        this.elizabeth.moverDerecha();
-	    }
-	    if (this.entorno.estaPresionada(this.entorno.TECLA_IZQUIERDA)) {
-	        this.elizabeth.moverIzquierda();
-	    }
+
+		if (this.gano) {
+			this.dibujarTodo();
+
+			this.entorno.cambiarFont("Arial", 30, Color.GREEN);
+			this.entorno.escribirTexto("GANASTE", 330, 260);
+
+			this.entorno.cambiarFont("Arial", 18, java.awt.Color.WHITE);
+			this.entorno.escribirTexto("Presiona R para reiniciar", 290, 310);
+
+			if (this.entorno.sePresiono('R') || this.entorno.sePresiono('r')) {
+				this.reiniciarJuego();
+			}
+			return;
+		}
         // con esto trabajo el disparo de la bola de fuego
         // Si se presiona el botón izquierdo del mouse y no hay una bola activa,
         // se crea una nueva bola desde la posición de Elizabeth hacia el mouse.
@@ -127,32 +114,29 @@ public class Juego extends InterfaceJuego
             }
         }
 
-
-
-
-
-
-
-
 	    // MOVER LOS PISOS ---
-	    if (this.entorno.estaPresionada(entorno.TECLA_DERECHA) && this.Bandera.getX() > 300.0) {
+	    if (this.entorno.estaPresionada(entorno.TECLA_DERECHA) && this.bandera.getX() > 300.0) {
 	    	this.elizabeth.moverDerecha();
 
-	    	for (int i = 0; i < this.pisos.length; i++) {
-	    		this.pisos[i].mover();
-
+	    	for (int i = 0; i < this.plataformas.length; i++) {
+	    		this.plataformas[i].moverDerecha();
 	    		}
-	    		this.Bandera.mover(this.pisos[0].getVelocidad());
+	    		this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
+		}
 
-	        }
-	    if(this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
-	    	this.elizabeth.moverIzquierda();
-	    }
+		if (this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && this.bandera.getX() > 300.0) {
+			this.elizabeth.moverIzquierda();
+
+			for (int i = 0; i < this.plataformas.length; i++) {
+				this.plataformas[i].moverIzquierda();
+			}
+			this.bandera.moverIzquierda(this.plataformas[0].getVelocidad());
+		}
 
 	    // REVISAR SI TOCA EL PISO ---
 	    boolean pisandoSuelo = false;
-	    for (int i = 0; i < this.pisos.length; i++) {
-	        if (this.pisos[i] != null && this.elizabeth.tocaPiso(this.pisos[i])) {
+	    for (int i = 0; i < this.plataformas.length; i++) {
+	        if (this.plataformas[i] != null && this.elizabeth.tocaPiso(this.plataformas[i])) {
 	            pisandoSuelo = true;
 	        }
 	    }
@@ -178,43 +162,49 @@ public class Juego extends InterfaceJuego
         if (this.elizabeth.getY() > this.entorno.alto() + 50) {
             this.perdio = true;
         }
-	    // --- 5. DIBUJAR TODO ---
-	    for (int i = 0; i < this.pisos.length; i++) {
-	        if (this.pisos[i] != null) {
-	            this.pisos[i].dibujar(this.entorno);
-	        }
-	    }
 
-
-	    if (this.elizabeth.tocarBandera(this.Bandera)) {
-
-	    	this.entorno.cambiarFont("Arial", 40, Color.GREEN);
-	    	this.entorno.escribirTexto("¡GANASTE EL JUEGO!", 250, 300);
-	    }
-
-	    this.elizabeth.dibujar(this.entorno);
-	    this.Bandera.dibujar(this.entorno);
-
-        if (this.bolaDeFuego != null) {
-            this.bolaDeFuego.dibujar(this.entorno);
-        }
+		if (this.elizabeth.tocarBandera(this.bandera)) {
+			gano = true;
+		}
+		dibujarTodo();
 
 	}
+
+	private void dibujarTodo() {
+		for (int i = 0; i < this.plataformas.length; i++) {
+			if (this.plataformas[i] != null) {
+				this.plataformas[i].dibujar(this.entorno);
+			}
+		}
+
+		this.elizabeth.dibujar(this.entorno);
+		this.bandera.dibujar(this.entorno);
+
+		if (this.bolaDeFuego != null) {
+			this.bolaDeFuego.dibujar(this.entorno);
+		}
+	}
+
 	private void reiniciarJuego() {
 		this.elizabeth = new Personaje(50, 400);
-
+		this.bandera = new Bandera(5390.0, 425.0);
 		this.bolaDeFuego = null;
 
-		this.pisos = new piso[5];
+		this.plataformas = new Plataforma[8];
 
-		this.pisos[0] = new piso(500, 550, 1000, 100);
-		this.pisos[1] = new piso(1650, 550, 1000, 100);
-		this.pisos[2] = new piso(2750, 550, 800, 100);
-		this.pisos[3] = new piso(3800, 550, 1000, 100);
-		this.pisos[4] = new piso(4900, 550, 1000, 100);
+		this.plataformas[0] = new Plataforma(500, 550, 1000, 100, Color.GREEN);
+		this.plataformas[1] = new Plataforma(1650, 550, 1000, 100, Color.GREEN);
+		this.plataformas[2] = new Plataforma(2750, 550, 800, 100, Color.GREEN);
+		this.plataformas[3] = new Plataforma(3800, 550, 1000, 100, Color.GREEN);
+		this.plataformas[4] = new Plataforma(4900, 550, 1000, 100, Color.GREEN);
+
+		this.plataformas[5] = new Plataforma(500, 560, 1000, 100, Color.BLUE);
+		this.plataformas[6] = new Plataforma(1650, 560, 1000, 100, Color.BLUE);
+		this.plataformas[7] = new Plataforma(2750, 560, 800, 100, Color.BLUE);
 
 		this.pausado = false;
 		this.perdio = false;
+		this.gano = false;
 	}
 
 	@SuppressWarnings("unused")

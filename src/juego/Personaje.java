@@ -2,6 +2,8 @@ package juego;
 
 import java.awt.Color;
 import entorno.Entorno;
+import java.awt.Image;
+import entorno.Herramientas;
 
 
 public class Personaje {
@@ -13,6 +15,7 @@ public class Personaje {
     private double velocidad;
     private boolean saltando;
     private int impulso;
+    private Image img;
 
 
 
@@ -24,10 +27,12 @@ public class Personaje {
 		this.velocidad = 3;
 		this.saltando = false;
 		this.impulso = 0;
+		
+		this.img = Herramientas.cargarImagen("princesa.png");
 	}
 	
 	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.PINK);
+		entorno.dibujarImagen(this.img, this.x, this.y, 0, 3);
 	}
 	
 

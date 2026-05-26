@@ -1,12 +1,11 @@
 package juego;
 
-import java.awt.Color;
 import entorno.Entorno;
 import java.awt.Image;
 import entorno.Herramientas;
 
 
-public class Personaje {
+public class Elizabeth {
 
     private double x;
     private double y;
@@ -19,7 +18,7 @@ public class Personaje {
 
 
 
-	public Personaje(double x, double y) {
+	public Elizabeth(double x, double y) {
 		this.x = x;
 		this.y = y;
 		this.ancho = 30;
@@ -80,7 +79,7 @@ public class Personaje {
     // Activa el salto
     public void saltar() {
         this.saltando = true;
-        this.impulso = 15; // 20 frames subiendo
+        this.impulso = 20;
     }
 
     // Procesa la subida ganándole a la gravedad

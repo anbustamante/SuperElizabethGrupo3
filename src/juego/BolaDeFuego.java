@@ -51,4 +51,13 @@ public class BolaDeFuego {
     public boolean salioDePantalla(Entorno entorno) {
         return this.x < 0 || this.x > entorno.ancho() || this.y < 0 || this.y > entorno.alto();
     }
+    public boolean tocaPez(Pez pez) {
+
+        double distanciaX = this.x - pez.getX();
+        double distanciaY = this.y - pez.getY();
+
+        double distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+
+        return distancia < 30;
+    }
 }

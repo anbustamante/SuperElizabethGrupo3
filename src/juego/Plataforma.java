@@ -24,7 +24,7 @@ public class Plataforma {
 	}
 
 	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, Color.GREEN);
+		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, color);
 
 	}
 

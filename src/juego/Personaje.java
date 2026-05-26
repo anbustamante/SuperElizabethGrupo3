@@ -21,7 +21,7 @@ public class Personaje {
 		this.y = y;
 		this.ancho = 30;
 		this.alto = 50;
-		this.velocidad = 1;
+		this.velocidad = 3;
 		this.saltando = false;
 		this.impulso = 0;
 	}

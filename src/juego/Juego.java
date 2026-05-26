@@ -115,22 +115,35 @@ public class Juego extends InterfaceJuego
         }
 
 	    // MOVER LOS PISOS ---
-	    if (this.entorno.estaPresionada(entorno.TECLA_DERECHA) && this.bandera.getX() > 300.0) {
-	    	this.elizabeth.moverDerecha();
+		if (this.entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+			if (this.elizabeth.getX() < 400) {
 
-	    	for (int i = 0; i < this.plataformas.length; i++) {
-	    		this.plataformas[i].moverDerecha();
-	    		}
-	    		this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
-		}
+				this.elizabeth.moverDerecha();
 
-		if (this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && this.bandera.getX() > 300.0) {
-			this.elizabeth.moverIzquierda();
+			} else {
 
-			for (int i = 0; i < this.plataformas.length; i++) {
-				this.plataformas[i].moverIzquierda();
+				for (int i = 0; i < this.plataformas.length; i++) {
+					this.plataformas[i].moverDerecha();
+				}
+				this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
 			}
-			this.bandera.moverIzquierda(this.plataformas[0].getVelocidad());
+		}
+		if (this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
+
+			// Si Elizabeth está lejos del borde izquierdo
+			if (this.elizabeth.getX() > 100) {
+
+				this.elizabeth.moverIzquierda();
+
+			} else {
+
+				// mover escenario al revés
+				for (int i = 0; i < this.plataformas.length; i++) {
+					this.plataformas[i].moverIzquierda();
+				}
+
+				this.bandera.moverIzquierda(this.plataformas[0].getVelocidad());
+			}
 		}
 
 	    // REVISAR SI TOCA EL PISO ---

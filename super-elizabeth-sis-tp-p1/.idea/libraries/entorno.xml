@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="entorno">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/entorno.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

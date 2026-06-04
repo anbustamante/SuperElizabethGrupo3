@@ -19,7 +19,7 @@ public class Plataforma {
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		this.velocidad = 8;
+		this.velocidad = 5;
 		this.color = color;
 	}
 

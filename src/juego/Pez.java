@@ -20,7 +20,7 @@ public class Pez {
         this.y = y;
         this.ancho = 30;
         this.alto = 50;
-        this.velocidad = 8;
+        this.velocidad = 5;
         this.saltando = false;
         this.impulso = 0;
 

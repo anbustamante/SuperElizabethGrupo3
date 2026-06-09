@@ -127,40 +127,28 @@ public class Juego extends InterfaceJuego
         }
 
 	    // MOVER LOS PISOS ---
-		if (this.entorno.estaPresionada(entorno.TECLA_DERECHA)) {
-			if (this.elizabeth.getX() < 400) {
-
-				this.elizabeth.moverDerecha();
-
-			} else {
-
-				for (int i = 0; i < this.plataformas.length; i++) {
-					this.plataformas[i].moverDerecha();
-				}
-				for(int i = 0; i < this.pez.length; i++){
-					if(pez[i] != null){
-						this.pez[i].moverDerecha();
-					}
-				}
-				this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
+        
+        //MUEVE EL SUELO Y ISLAS HACIA LA IZQUIERDA
+        for (int i = 0; i < this.plataformas.length; i++) {
+			this.plataformas[i].moverDerecha();
+		}
+        
+        // MUEVE LOS PECES HACIA LA IZQUIERDA
+        for(int i = 0; i < this.pez.length; i++){
+			if(pez[i] != null){
+				this.pez[i].moverDerecha();
 			}
 		}
+        //MUVE LA BANDERA A LA MISMA VELOCIDAD QUE LAS PLATAFORMAS
+		this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
+        
+		if (this.entorno.estaPresionada(entorno.TECLA_DERECHA)) {
+				this.elizabeth.moverDerecha();
+					
+		}
 		if (this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
-			if (this.elizabeth.getX() > 100) {
 
-				this.elizabeth.moverIzquierda();
-
-			} else {
-				for (int i = 0; i < this.plataformas.length; i++) {
-					this.plataformas[i].moverIzquierda();
-				}
-				for(int i = 0; i < this.pez.length; i++){
-					if(pez[i] != null){
-						this.pez[i].moverIzquierda();
-					}
-				}
-				this.bandera.moverIzquierda(this.plataformas[0].getVelocidad());
-			}
+				this.elizabeth.moverIzquierda();			
 		}
 
 	    // REVISAR SI TOCA EL PISO ---
@@ -192,6 +180,10 @@ public class Juego extends InterfaceJuego
         if (this.elizabeth.getY() > this.entorno.alto() + 50) {
             this.perdio = true;
         }
+        if (this.elizabeth.getY() == this.pez.getY()) {
+        	this.perdio = true;
+        }
+        
 
 
 		if (this.elizabeth.tocarBandera(this.bandera) && killCount == pez.length){
@@ -199,9 +191,9 @@ public class Juego extends InterfaceJuego
 		}else if(this.elizabeth.tocarBandera(this.bandera)){
 			perdio = true;
 		}
+		
 		for(int i = 0; i < this.pez.length; i++){
 			if (this.pez[i] != null) {
-				this.pez[i].moverse();
 			}
 		}
 		this.entorno.cambiarFont("Arial", 30, java.awt.Color.WHITE);
@@ -236,12 +228,14 @@ public class Juego extends InterfaceJuego
 		this.pez = new Pez[12];
 		this.plataformas = new Plataforma[9];
 		killCount = 0;
+		
 
 		this.plataformas[0] = new Plataforma(500, 550, 1000, 100, Color.GREEN);
 		this.plataformas[1] = new Plataforma(1650, 550, 1000, 100, Color.GREEN);
 		this.plataformas[2] = new Plataforma(2750, 550, 800, 100, Color.GREEN);
 		this.plataformas[3] = new Plataforma(3800, 550, 1000, 100, Color.GREEN);
 		this.plataformas[4] = new Plataforma(4900, 550, 1000, 100, Color.GREEN);
+		
 		this.plataformas[5] = new Plataforma(900, 400, 300, 50, Color.BLUE);
 		this.plataformas[6] = new Plataforma(100, 300, 300, 50, Color.BLUE);
 		this.plataformas[7] = new Plataforma(1400, 400, 300, 50, Color.BLUE);
@@ -263,6 +257,8 @@ public class Juego extends InterfaceJuego
 		this.perdio = false;
 		this.gano = false;
 	}
+	
+	
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)

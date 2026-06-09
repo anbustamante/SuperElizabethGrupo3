@@ -11,8 +11,6 @@ public class Pez {
     private double ancho;
     private double alto;
     private double velocidad;
-    private boolean saltando;
-    private int impulso;
     private Image img;
 
     public Pez(double x, double y) {
@@ -20,24 +18,17 @@ public class Pez {
         this.y = y;
         this.ancho = 30;
         this.alto = 50;
-        this.velocidad = 8;
-        this.saltando = false;
-        this.impulso = 0;
+        this.velocidad = 5;
 
         this.img = Herramientas.cargarImagen("pez.png");
     }
     public void dibujar(Entorno entorno) {
         entorno.dibujarImagen(this.img, this.x, this.y, 0, 1);
     }
-    public void moverse(){
-        this.x = this.x - 1;
-    }
+ // En Pez.java, usá este método para la lógica de movimiento
     public void moverDerecha() {
-        this.x = this.x - this.velocidad;
-    }
-
-    public void moverIzquierda() {
-        this.x = this.x + this.velocidad;
+        this.x -= this.velocidad;
+        
     }
     public boolean salioDePantalla(Entorno entorno) {
         return this.x < 0 || this.x > entorno.ancho() || this.y < 0 || this.y > entorno.alto();
@@ -48,6 +39,14 @@ public class Pez {
     }
 
     public double getY() {
+        return y;
+    }
+    
+    public double getAncho() {
+        return y;
+    }
+    
+    public double getAlto() {
         return y;
     }
 }

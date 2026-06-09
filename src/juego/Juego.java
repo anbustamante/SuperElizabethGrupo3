@@ -180,6 +180,10 @@ public class Juego extends InterfaceJuego
         if (this.elizabeth.getY() > this.entorno.alto() + 50) {
             this.perdio = true;
         }
+        if (this.elizabeth.getY() == this.pez.getY()) {
+        	this.perdio = true;
+        }
+        
 
 
 		if (this.elizabeth.tocarBandera(this.bandera) && killCount == pez.length){
@@ -187,9 +191,9 @@ public class Juego extends InterfaceJuego
 		}else if(this.elizabeth.tocarBandera(this.bandera)){
 			perdio = true;
 		}
+		
 		for(int i = 0; i < this.pez.length; i++){
 			if (this.pez[i] != null) {
-				this.pez[i].moverse();
 			}
 		}
 		this.entorno.cambiarFont("Arial", 30, java.awt.Color.WHITE);
@@ -224,12 +228,14 @@ public class Juego extends InterfaceJuego
 		this.pez = new Pez[12];
 		this.plataformas = new Plataforma[9];
 		killCount = 0;
+		
 
 		this.plataformas[0] = new Plataforma(500, 550, 1000, 100, Color.GREEN);
 		this.plataformas[1] = new Plataforma(1650, 550, 1000, 100, Color.GREEN);
 		this.plataformas[2] = new Plataforma(2750, 550, 800, 100, Color.GREEN);
 		this.plataformas[3] = new Plataforma(3800, 550, 1000, 100, Color.GREEN);
 		this.plataformas[4] = new Plataforma(4900, 550, 1000, 100, Color.GREEN);
+		
 		this.plataformas[5] = new Plataforma(900, 400, 300, 50, Color.BLUE);
 		this.plataformas[6] = new Plataforma(100, 300, 300, 50, Color.BLUE);
 		this.plataformas[7] = new Plataforma(1400, 400, 300, 50, Color.BLUE);
@@ -251,6 +257,8 @@ public class Juego extends InterfaceJuego
 		this.perdio = false;
 		this.gano = false;
 	}
+	
+	
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)

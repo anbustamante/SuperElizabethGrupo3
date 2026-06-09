@@ -22,6 +22,7 @@ public class Plataforma {
 		this.velocidad = 5;
 		this.color = color;
 	}
+	
 
 	public void dibujar(Entorno entorno) {
 		entorno.dibujarRectangulo(this.x, this.y, this.ancho, this.alto, 0, color);

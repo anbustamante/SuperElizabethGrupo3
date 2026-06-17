@@ -18,7 +18,7 @@ public class Pez {
         this.y = y;
         this.ancho = 30;
         this.alto = 50;
-        this.velocidad = 5;
+        this.velocidad = 8;
 
         this.img = Herramientas.cargarImagen("pez.png");
     }
@@ -43,10 +43,12 @@ public class Pez {
     }
     
     public double getAncho() {
-        return y;
+        return ancho;
     }
     
     public double getAlto() {
-        return y;
+        return alto;
     }
+    
+    
 }

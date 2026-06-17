@@ -75,6 +75,25 @@ public class Elizabeth {
         }
         return false; // No, está en el aire
     }
+    
+    public boolean tocaPez(Pez pez) {
+ 
+
+        double miIzquierda = (this.x - (this.ancho / 2));
+        double miDerecha = (this.x + (this.ancho / 2));
+        double miArriba = (this.y - (this.alto / 2));
+        double miAbajo = (this.y + (this.alto / 2));
+
+        // Hacemos lo mismo con el Pez (para que su hitbox también sea más chica)
+        double pezIzquierda = (pez.getX() - (pez.getAncho() / 2));
+        double pezDerecha = (pez.getX() + (pez.getAncho() / 2));
+        double pezArriba = (pez.getY() - (pez.getAlto() / 2));
+        double pezAbajo = (pez.getY() + (pez.getAlto() / 2));
+
+        return miIzquierda < pezDerecha && miDerecha > pezIzquierda &&
+               miArriba < pezAbajo && miAbajo > pezArriba;
+    }
+    
 
     // Activa el salto
     public void saltar() {
@@ -90,12 +109,6 @@ public class Elizabeth {
         } else {
             this.saltando = false; // Se quedó sin nafta, empieza a caer
         }
-    }
-    // Al tocar la bandera se termina el juego
-    public boolean tocarBandera(Bandera b) {
-    	boolean colisionX = Math.abs(this.x - b.getX()) < (this.ancho / 2 + b.getAncho() /2 );
-    	boolean colisionY = Math.abs(this.y - b.getY()) < (this.alto / 2 + b.getAlto() / 2);
-    	return colisionX && colisionY;
     }
 
     public double getX() {

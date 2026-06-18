@@ -20,7 +20,7 @@ public class Juego extends InterfaceJuego
 	private Elizabeth elizabeth;
 	private Pez[] pez;
 	private Plataforma[] plataformas;
-	private Bandera bandera;
+
     private BolaDeFuego bolaDeFuego;
 
     // acá las features de poder pausar y perder el juego si la tipa se cae
@@ -130,8 +130,52 @@ public class Juego extends InterfaceJuego
         
         //MUEVE EL SUELO Y ISLAS HACIA LA IZQUIERDA
         for (int i = 0; i < this.plataformas.length; i++) {
-			this.plataformas[i].moverDerecha();
-		}
+            // Movemos el piso porque que moverDerecha resta en X)
+            if (this.plataformas[i] != null) {
+                this.plataformas[i].moverDerecha();
+
+                // Si la plataforma se sale de la pantalla por la izquierda
+                if (this.plataformas[i].getX() < -1000) { 
+                    
+                    // Buscamos cuál es la plataforma que está más a la derecha actualmente
+                    double xMasDerecha = 0;
+                    for (Plataforma p : this.plataformas) {
+                        if (p != null && p.getX() > xMasDerecha) {
+                             xMasDerecha = p.getX();
+                        }
+                    }
+                    
+                    // Teletransportamos la plataforma que salió a continuación de la última
+                    // Ajustá este valor (ej. 1100) según la separación que quieras entre pisos
+                    double nuevaX = xMasDerecha + 1100; 
+                    
+                    // Re-instanciamos con el mismo patrón (ajustá el ancho según el índice si hace falta)
+                    this.plataformas[i] = new Plataforma(nuevaX, 550, this.plataformas[i].getAncho(), 100, Color.GREEN);
+                }
+            }
+            if (i >= 5 && i <= 8 && this.plataformas[i].getX() < -300) {
+                
+                // 1. Buscamos la plataforma azul más lejana para no superponer
+                double xMasDerecha = 0;
+                for (int j = 5; j <= 8; j++) {
+                    if (this.plataformas[j] != null && this.plataformas[j].getX() > xMasDerecha) {
+                        xMasDerecha = this.plataformas[j].getX();
+                    }
+                }
+
+                // 2. Nueva X: la ponemos 500 píxeles después de la última
+                double nuevaX = xMasDerecha + 500; 
+                
+                // 3. Altura controlada: elegimos una de las 3 alturas seguras
+                // Esto asegura que el salto sea siempre posible
+                double[] alturasSeguras = { 200, 300, 400 };
+                double nuevaY = alturasSeguras[(int)(Math.random() * alturasSeguras.length)];
+                
+                // 4. Creamos la nueva plataforma con la altura fija
+                this.plataformas[i] = new Plataforma(nuevaX, nuevaY, 300, 50, Color.BLUE);
+            }
+        }
+        
         
         // MUEVE LOS PECES HACIA LA IZQUIERDA
         for(int i = 0; i < this.pez.length; i++){
@@ -139,9 +183,8 @@ public class Juego extends InterfaceJuego
 				this.pez[i].moverDerecha();
 			}
 		}
-        //MUVE LA BANDERA A LA MISMA VELOCIDAD QUE LAS PLATAFORMAS
-		this.bandera.moverDerecha(this.plataformas[0].getVelocidad());
         
+        // TECLAS DE MOV IZQUIERDA DERECHA
 		if (this.entorno.estaPresionada(entorno.TECLA_DERECHA)) {
 				this.elizabeth.moverDerecha();
 					
@@ -156,6 +199,24 @@ public class Juego extends InterfaceJuego
 	    for (int i = 0; i < this.plataformas.length; i++) {
 	        if (this.plataformas[i] != null && this.elizabeth.tocaPiso(this.plataformas[i])) {
 	            pisandoSuelo = true;
+	        	}
+	        }
+	    
+	    for (int i = 0; i < this.plataformas.length; i++) {
+	        if (this.plataformas[i] != null) {
+	            
+	            // 1. Detección de techo (Primero, porque es un choque más crítico)
+	            // Solo para plataformas azules
+	            if (this.plataformas[i].getColor().equals(Color.BLUE)) {
+	                if (this.elizabeth.chocaPisoInferior(this.plataformas[i])) {
+	                    // Ya no está saltando, choca techo
+	                }
+	            }
+	            
+	            // 2. Detección de suelo
+	            if (this.elizabeth.tocaPiso(this.plataformas[i])) {
+	                // Ya está pisando
+	            }
 	        }
 	    }
 
@@ -167,7 +228,7 @@ public class Juego extends InterfaceJuego
 	        this.elizabeth.saltar();
 	    }
 
-	    //  APLICAR GRAVEDAD O SUBIDA ---
+	    //  APLICAR GRAVEDAD O SUBIDA
 	    // Si NO pisa el suelo, la gravedad tira para abajo
 	    if (!pisandoSuelo) {
 	        this.elizabeth.caer();
@@ -180,21 +241,19 @@ public class Juego extends InterfaceJuego
         if (this.elizabeth.getY() > this.entorno.alto() + 50) {
             this.perdio = true;
         }
-        if (this.elizabeth.getY() == this.pez.getY()) {
-        	this.perdio = true;
-        }
         
-
-
-		if (this.elizabeth.tocarBandera(this.bandera) && killCount == pez.length){
+        // si los peces tocan a la princesa pierde
+        
+        for (int i = 0; i < this.pez.length; i++) {     
+        	if (this.pez[i] != null) {
+            	if (this.elizabeth.tocaPez(this.pez[i])) {
+            		this.perdio = true; // Cambiamos el estado del juego
+            		this.pez[i].moverDerecha();
+                }
+            }
+        }
+        if (killCount == pez.length){
 			gano = true;
-		}else if(this.elizabeth.tocarBandera(this.bandera)){
-			perdio = true;
-		}
-		
-		for(int i = 0; i < this.pez.length; i++){
-			if (this.pez[i] != null) {
-			}
 		}
 		this.entorno.cambiarFont("Arial", 30, java.awt.Color.WHITE);
 		this.entorno.escribirTexto( killCount + "/"+ pez.length, 0, 50);
@@ -210,7 +269,6 @@ public class Juego extends InterfaceJuego
 		}
 
 		this.elizabeth.dibujar(this.entorno);
-		this.bandera.dibujar(this.entorno);
 		for(int i = 0; i < this.pez.length; i++){
 			if(pez[i] != null){
 				this.pez[i].dibujar(this.entorno);
@@ -223,7 +281,6 @@ public class Juego extends InterfaceJuego
 
 	private void reiniciarJuego() {
 		this.elizabeth = new Elizabeth(50, 400);
-		this.bandera = new Bandera(4290.0, 425.0);
 		this.bolaDeFuego = null;
 		this.pez = new Pez[12];
 		this.plataformas = new Plataforma[9];
@@ -236,10 +293,11 @@ public class Juego extends InterfaceJuego
 		this.plataformas[3] = new Plataforma(3800, 550, 1000, 100, Color.GREEN);
 		this.plataformas[4] = new Plataforma(4900, 550, 1000, 100, Color.GREEN);
 		
+		// Definimos alturas variadas desde el inicio para que el nivel empiece divertido
 		this.plataformas[5] = new Plataforma(900, 400, 300, 50, Color.BLUE);
-		this.plataformas[6] = new Plataforma(100, 300, 300, 50, Color.BLUE);
-		this.plataformas[7] = new Plataforma(1400, 400, 300, 50, Color.BLUE);
-		this.plataformas[8] = new Plataforma(1800, 400, 300, 50, Color.BLUE);
+		this.plataformas[6] = new Plataforma(1300, 300, 100, 50, Color.BLUE); // Un poco más lejos y bajo
+		this.plataformas[7] = new Plataforma(1700, 400, 300, 50, Color.BLUE); // Más lejos y bajo
+		this.plataformas[8] = new Plataforma(2100, 300, 250, 50, Color.BLUE); // Sube de nuevo
 
 		this.pez[0] = new Pez(500, 400);
 		this.pez[1] = new Pez(1600, 200);

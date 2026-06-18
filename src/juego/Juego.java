@@ -141,7 +141,7 @@ public class Juego extends InterfaceJuego
                     double xMasDerecha = 0;
                     for (Plataforma p : this.plataformas) {
                         if (p != null && p.getX() > xMasDerecha) {
-                            xMasDerecha = p.getX();
+                             xMasDerecha = p.getX();
                         }
                     }
                     
@@ -155,7 +155,7 @@ public class Juego extends InterfaceJuego
             }
             if (i >= 5 && i <= 8 && this.plataformas[i].getX() < -300) {
                 
-                // Buscamos la plataforma azul más lejana para no superponer
+                // 1. Buscamos la plataforma azul más lejana para no superponer
                 double xMasDerecha = 0;
                 for (int j = 5; j <= 8; j++) {
                     if (this.plataformas[j] != null && this.plataformas[j].getX() > xMasDerecha) {
@@ -163,13 +163,15 @@ public class Juego extends InterfaceJuego
                     }
                 }
 
-                // Nueva X: la ponemos 400 píxeles después de la última
+                // 2. Nueva X: la ponemos 500 píxeles después de la última
                 double nuevaX = xMasDerecha + 500; 
                 
-                // Altura controlada: entre 200 (alto) y 450 (bajo)
-                // Esto asegura que Elizabeth siempre llegue saltando
-                double nuevaY = 200 + (Math.random() * 250);
+                // 3. Altura controlada: elegimos una de las 3 alturas seguras
+                // Esto asegura que el salto sea siempre posible
+                double[] alturasSeguras = { 200, 300, 400 };
+                double nuevaY = alturasSeguras[(int)(Math.random() * alturasSeguras.length)];
                 
+                // 4. Creamos la nueva plataforma con la altura fija
                 this.plataformas[i] = new Plataforma(nuevaX, nuevaY, 300, 50, Color.BLUE);
             }
         }
@@ -197,6 +199,24 @@ public class Juego extends InterfaceJuego
 	    for (int i = 0; i < this.plataformas.length; i++) {
 	        if (this.plataformas[i] != null && this.elizabeth.tocaPiso(this.plataformas[i])) {
 	            pisandoSuelo = true;
+	        	}
+	        }
+	    
+	    for (int i = 0; i < this.plataformas.length; i++) {
+	        if (this.plataformas[i] != null) {
+	            
+	            // 1. Detección de techo (Primero, porque es un choque más crítico)
+	            // Solo para plataformas azules
+	            if (this.plataformas[i].getColor().equals(Color.BLUE)) {
+	                if (this.elizabeth.chocaPisoInferior(this.plataformas[i])) {
+	                    // Ya no está saltando, choca techo
+	                }
+	            }
+	            
+	            // 2. Detección de suelo
+	            if (this.elizabeth.tocaPiso(this.plataformas[i])) {
+	                // Ya está pisando
+	            }
 	        }
 	    }
 
@@ -273,10 +293,11 @@ public class Juego extends InterfaceJuego
 		this.plataformas[3] = new Plataforma(3800, 550, 1000, 100, Color.GREEN);
 		this.plataformas[4] = new Plataforma(4900, 550, 1000, 100, Color.GREEN);
 		
-		this.plataformas[5] = new Plataforma(900, 400, 200, 50, Color.BLUE);
-		this.plataformas[6] = new Plataforma(100, 300, 100, 50, Color.BLUE);
-		this.plataformas[7] = new Plataforma(1400, 400, 300, 50, Color.BLUE);
-		this.plataformas[8] = new Plataforma(1800, 400, 250, 50, Color.BLUE);
+		// Definimos alturas variadas desde el inicio para que el nivel empiece divertido
+		this.plataformas[5] = new Plataforma(900, 400, 300, 50, Color.BLUE);
+		this.plataformas[6] = new Plataforma(1300, 300, 100, 50, Color.BLUE); // Un poco más lejos y bajo
+		this.plataformas[7] = new Plataforma(1700, 400, 300, 50, Color.BLUE); // Más lejos y bajo
+		this.plataformas[8] = new Plataforma(2100, 300, 250, 50, Color.BLUE); // Sube de nuevo
 
 		this.pez[0] = new Pez(500, 400);
 		this.pez[1] = new Pez(1600, 200);

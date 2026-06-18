@@ -3,6 +3,7 @@ package juego;
 import entorno.Entorno;
 import java.awt.Image;
 import entorno.Herramientas;
+import java.awt.Color;
 
 
 public class Elizabeth {
@@ -57,6 +58,7 @@ public class Elizabeth {
 
     // Método para detectar si choca contra un piso
     public boolean tocaPiso(Plataforma plataforma) {
+    	
         // Calculamos dónde están los pies de Elizabeth y sus costados
         double miAbajo = this.y + (this.alto / 2);
         double miIzquierda = this.x - (this.ancho / 2);
@@ -74,6 +76,25 @@ public class Elizabeth {
             return true; // Sí, está pisando
         }
         return false; // No, está en el aire
+    }
+    
+    public boolean chocaPisoInferior(Plataforma plataforma) {
+        double miArriba = this.y - (this.alto / 2);
+        double miIzquierda = this.x - (this.ancho / 2);
+        double miDerecha = this.x + (this.ancho / 2);
+        
+        double pisoAbajo = plataforma.getY() + (plataforma.getAlto() / 2);
+        double pisoIzquierda = plataforma.getX() - (plataforma.getAncho() / 2);
+        double pisoDerecha = plataforma.getX() + (plataforma.getAncho() / 2);
+
+        // Detección: Si la cabeza (miArriba) entra en una zona de 15 píxeles debajo del bloque
+        if (miArriba <= pisoAbajo && miArriba >= pisoAbajo - 15 && miDerecha > pisoIzquierda && miIzquierda < pisoDerecha) {
+            this.y = pisoAbajo + (this.alto / 2); // La bajamos al borde inferior
+            this.impulso = 0;                     // Frenamos la fuerza del salto
+            this.saltando = false;                // Avisamos que el salto terminó
+            return true; 
+        }
+        return false;
     }
     
     public boolean tocaPez(Pez pez) {

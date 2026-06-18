@@ -42,4 +42,5 @@ public class Plataforma {
 	public double getAncho() { return this.ancho; }
 	public double getAlto() { return this.alto; }
 	public double getVelocidad() { return this.velocidad; }
-}
+	public Color getColor() {return this.color;}
+	}

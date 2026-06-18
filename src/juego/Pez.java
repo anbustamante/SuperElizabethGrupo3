@@ -18,7 +18,7 @@ public class Pez {
         this.y = y;
         this.ancho = 30;
         this.alto = 50;
-        this.velocidad = 8;
+        this.velocidad = 4;
 
         this.img = Herramientas.cargarImagen("pez.png");
     }

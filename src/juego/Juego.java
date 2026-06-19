@@ -28,7 +28,7 @@ public class Juego extends InterfaceJuego
     private boolean perdio;
 	private boolean gano;
 	int killCount;
-
+	int PUNTAJE_GANADOR = 7;
 
 	public Juego()
 	{
@@ -47,6 +47,7 @@ public class Juego extends InterfaceJuego
 	 * (ver el enunciado del TP para mayor detalle).
 	 */
 	public void tick() {
+
 		// apretando la P ponemos pausa
 		if (this.entorno.sePresiono('P') || this.entorno.sePresiono('p')) {
 			this.pausado = !this.pausado;
@@ -69,7 +70,7 @@ public class Juego extends InterfaceJuego
 			this.entorno.cambiarFont("Arial", 30, java.awt.Color.RED);
 			this.entorno.escribirTexto("PERDISTE", 330, 260);
 			this.entorno.cambiarFont("Arial", 18, java.awt.Color.WHITE);
-			this.entorno.escribirTexto("Cantidad de peces eliminados: " + killCount + "/"+ pez.length, 290, 310);
+			this.entorno.escribirTexto("Cantidad de peces eliminados: " + killCount + "/"+ PUNTAJE_GANADOR, 290, 310);
 
 			this.entorno.cambiarFont("Arial", 18, java.awt.Color.WHITE);
 			this.entorno.escribirTexto("Presiona R para reiniciar", 290, 350);
@@ -113,7 +114,7 @@ public class Juego extends InterfaceJuego
 			for (int i = 0; i < this.pez.length; i++) {
 
 				if (this.pez[i] != null && this.bolaDeFuego.tocaPez(this.pez[i])) {
-					this.pez[i] = null;
+					pez[i].setX(-10);
 					killCount++;
 					this.bolaDeFuego = null;
 					break;
@@ -180,7 +181,20 @@ public class Juego extends InterfaceJuego
         // MUEVE LOS PECES HACIA LA IZQUIERDA
         for(int i = 0; i < this.pez.length; i++){
 			if(pez[i] != null){
+				int yRandom = (int) (Math.random() * 301) + 100;
 				this.pez[i].moverDerecha();
+				if (this.pez[i].getX() < -100) {
+
+					double xMasDerecha = entorno.ancho();
+					for (Pez pez : this.pez) {
+						if (pez != null && pez.getX() > xMasDerecha) {
+							xMasDerecha = pez.getX();
+						}
+					}
+
+					double nuevaX = xMasDerecha + (int)(Math.random() * 200) + 150;
+					this.pez[i] = new Pez(nuevaX, yRandom);
+				}
 			}
 		}
         
@@ -190,7 +204,6 @@ public class Juego extends InterfaceJuego
 					
 		}
 		if (this.entorno.estaPresionada(entorno.TECLA_IZQUIERDA)) {
-
 				this.elizabeth.moverIzquierda();			
 		}
 
@@ -201,10 +214,10 @@ public class Juego extends InterfaceJuego
 	            pisandoSuelo = true;
 	        	}
 	        }
-	    
+
 	    for (int i = 0; i < this.plataformas.length; i++) {
 	        if (this.plataformas[i] != null) {
-	            
+
 	            // 1. Detección de techo (Primero, porque es un choque más crítico)
 	            // Solo para plataformas azules
 	            if (this.plataformas[i].getColor().equals(Color.BLUE)) {
@@ -212,7 +225,7 @@ public class Juego extends InterfaceJuego
 	                    // Ya no está saltando, choca techo
 	                }
 	            }
-	            
+
 	            // 2. Detección de suelo
 	            if (this.elizabeth.tocaPiso(this.plataformas[i])) {
 	                // Ya está pisando
@@ -252,11 +265,11 @@ public class Juego extends InterfaceJuego
                 }
             }
         }
-        if (killCount == pez.length){
+        if (killCount == PUNTAJE_GANADOR){
 			gano = true;
 		}
 		this.entorno.cambiarFont("Arial", 30, java.awt.Color.WHITE);
-		this.entorno.escribirTexto( killCount + "/"+ pez.length, 0, 50);
+		this.entorno.escribirTexto( killCount + "/"+ PUNTAJE_GANADOR, 0, 50);
 		dibujarTodo();
 
 	}
@@ -282,7 +295,7 @@ public class Juego extends InterfaceJuego
 	private void reiniciarJuego() {
 		this.elizabeth = new Elizabeth(50, 400);
 		this.bolaDeFuego = null;
-		this.pez = new Pez[12];
+		this.pez = new Pez[3];
 		this.plataformas = new Plataforma[9];
 		killCount = 0;
 		
@@ -302,15 +315,7 @@ public class Juego extends InterfaceJuego
 		this.pez[0] = new Pez(500, 400);
 		this.pez[1] = new Pez(1600, 200);
 		this.pez[2] = new Pez(2750, 100);
-		this.pez[3] = new Pez(3800, 400);
-		this.pez[4] = new Pez(1700, 400);
-		this.pez[5] = new Pez(2850, 200);
-		this.pez[6] = new Pez(3600, 100);
-		this.pez[7] = new Pez(2000, 400);
-		this.pez[8] = new Pez(3000, 400);
-		this.pez[9] = new Pez(3900, 200);
-		this.pez[10] = new Pez(4800, 100);
-		this.pez[11] = new Pez(6000, 400);
+
 		this.pausado = false;
 		this.perdio = false;
 		this.gano = false;

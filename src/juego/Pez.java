@@ -34,6 +34,10 @@ public class Pez {
         return this.x < 0 || this.x > entorno.ancho() || this.y < 0 || this.y > entorno.alto();
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
     public double getX() {
         return x;
     }
